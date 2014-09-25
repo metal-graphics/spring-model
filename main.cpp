@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include <time.h>
 #include "DrawLine.h"
+#include "DrawCircle.h"
 #include <utility>
 
 using namespace std;
@@ -12,6 +13,7 @@ typedef pair<int, int> pii;
 int clicks = 0;
 pii a, b;
 
+
 void mouseFunction( int button, int state, int x, int y )
 {
   if( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
@@ -20,11 +22,13 @@ void mouseFunction( int button, int state, int x, int y )
     {
       a = make_pair( x, 850-y );
       clicks = 1;
+      DrawCircle dc = DrawCircle (a);
     }
     else if( clicks==1 )
     {
       b = make_pair( x, 850-y );
       clicks=0;
+      DrawCircle dc2 = DrawCircle (b);
       DrawLine ld = DrawLine( a, b );
     }
   }

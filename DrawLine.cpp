@@ -5,10 +5,6 @@
 #include <utility>
 #include "DrawLine.h"
 
-using namespace std;
-
-typedef pair<int, int> pii;
-
 pii temp;
 int x, y, dx, dy;
 
