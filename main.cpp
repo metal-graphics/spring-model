@@ -5,6 +5,8 @@
 #include "DrawLine.h"
 #include "DrawCircle.h"
 #include <utility>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -12,24 +14,50 @@ typedef pair<int, int> pii;
 
 int clicks = 0;
 pii a, b;
-
+vector< pair<int, int> > points;
 
 void mouseFunction( int button, int state, int x, int y )
 {
+  int i=0;
   if( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
   {
-    if( clicks==0 )
+    if( points.empty() )
     {
-      a = make_pair( x, 850-y );
-      clicks = 1;
-      DrawCircle dc = DrawCircle (a);
+      points.push_back( make_pair(x, 850-y) );
+      DrawCircle dc = DrawCircle(make_pair(x, 850-y));
     }
-    else if( clicks==1 )
+    else
     {
-      b = make_pair( x, 850-y );
-      clicks=0;
-      DrawCircle dc2 = DrawCircle (b);
-      DrawLine ld = DrawLine( a, b );
+      int sz = points.size();
+      for( i=0; i<sz; i++ )
+      {
+        float rad;
+        int dx1 = points[i].first - x;
+        int dy1 = points[i].second - (850-y);
+        rad = sqrt( dx1*dx1 + dy1*dy1 );
+
+        if( rad<=10 )
+        {
+          if( clicks==0 )
+          {
+            a = points[i];
+            clicks = 1;
+          }
+          else if(clicks==1)
+          {
+            b = points[i];
+            clicks = 0;
+            DrawLine dl = DrawLine(a, b);
+          }
+          break;
+        }
+      }
+      if( i==sz )
+      {
+        points.push_back( make_pair(x, 850-y) );
+        DrawCircle dc = DrawCircle(make_pair(x, 850-y));
+        clicks = 0;
+      }
     }
   }
 }
