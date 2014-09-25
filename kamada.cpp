@@ -229,11 +229,12 @@ void update_parameters(int vno){
 }// update_parameters
 
 
-void minimiseEnergy(int vno){
+void minimiseEnergy( ){
 	
 	while (sqrt(dE_dx[getVmax()] * dE_dx[getVmax()] + dE_dy[getVmax()] * dE_dy[getVmax()]) > E) {
 		int vno = getVmax();
 		long double dx, dy, deltaM;
+		deltaM = sqrt(dE_dx[vno] * dE_dx[vno] + dE_dy[vno] * dE_dy[vno]);
 		
 		while (deltaM > E){
 			//solve for dx,dy
