@@ -81,6 +81,14 @@ void mouseFunction( int button, int state, int x, int y )
 }
 
 
+void myDisplay()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  glFlush();
+}
+
+
 void computeEnergy()
 {
   cout<<"numPo= "<<numPo;
@@ -90,7 +98,7 @@ void computeEnergy()
   {
     for (int j = 0; j < numPo; j++)
     {
-      if(d[i][j]!=1)
+      if(d[i][j]==0)
       {
         d[i][j] = INF;
       }
@@ -108,6 +116,7 @@ void computeEnergy()
 
 void drawGraph()
 {
+  myDisplay();
   for( int i=0; i<numPo; i++ )
   {
     DrawCircle dc1 = DrawCircle(newpo[i]);
@@ -127,9 +136,11 @@ void drawGraph()
 
 void myInit()
 {
+  glFlush();
+
   glClearColor(0.0, 0.0, 0.0, 0.0);
 
-  glColor3f (1.0, 1.0, 1.0);
+  glColor3f (1.0, 0.0, 1.0);
 
   glMatrixMode(GL_PROJECTION);
 
@@ -138,8 +149,6 @@ void myInit()
   gluOrtho2D(0, 850.0, 0.0, 850.0);
 
   glMatrixMode(GL_MODELVIEW);
-
-  glutMouseFunc( mouseFunction );
 
   glFlush();
 }
@@ -157,7 +166,11 @@ int main(int argc, char** argv)
 
   glutCreateWindow("midpoint algorithm");
 
-  glutDisplayFunc(myInit);
+  glutDisplayFunc(myDisplay);
+
+  glutMouseFunc(mouseFunction);
+
+  myInit();
 
   glutMainLoop();
 
