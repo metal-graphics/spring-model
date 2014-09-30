@@ -4,25 +4,39 @@
 #include <time.h>
 #include "DrawLine.h"
 #include "DrawCircle.h"
+#include "sfm.cpp"
 #include <utility>
 #include <cmath>
 #include <vector>
+
+#define INF 10000000;
 
 using namespace std;
 
 typedef pair<int, int> pii;
 
-int clicks = 0;
+int clicks = 0, temp2, numPo=0;
 pii a, b;
-vector< pair<int, int> > points;
+
+vector< pair<int,int> > points, newpo;
+long double d[100][100];
+
+void computeEnergy();
+void drawGraph();
+
 
 void mouseFunction( int button, int state, int x, int y )
 {
   int i=0;
   if( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
   {
-    if( points.empty() )
+    if( y<= 100 )
     {
+      computeEnergy();
+    }
+    else if( points.empty() )
+    {
+      numPo = 1;
       points.push_back( make_pair(x, 850-y) );
       DrawCircle dc = DrawCircle(make_pair(x, 850-y));
     }
@@ -41,12 +55,15 @@ void mouseFunction( int button, int state, int x, int y )
           if( clicks==0 )
           {
             a = points[i];
+            temp2 = i;
             clicks = 1;
           }
           else if(clicks==1)
           {
             b = points[i];
             clicks = 0;
+            d[i][temp2] = 1;
+            d[temp2][i] = 1;
             DrawLine dl = DrawLine(a, b);
           }
           break;
@@ -54,9 +71,54 @@ void mouseFunction( int button, int state, int x, int y )
       }
       if( i==sz )
       {
+        numPo++;
         points.push_back( make_pair(x, 850-y) );
         DrawCircle dc = DrawCircle(make_pair(x, 850-y));
         clicks = 0;
+      }
+    }
+  }
+}
+
+
+void computeEnergy()
+{
+  cout<<"numPo= "<<numPo;
+
+  SFM s ;
+  for(int i=0; i<numPo; i++)
+  {
+    for (int j = 0; j < numPo; j++)
+    {
+      if(d[i][j]!=1)
+      {
+        d[i][j] = INF;
+      }
+      s.d[i][j] = d[i][j];
+    }
+  }
+
+  s.run_spring_force_model( points );
+
+  newpo = s.p;
+
+  drawGraph();
+}
+
+
+void drawGraph()
+{
+  for( int i=0; i<numPo; i++ )
+  {
+    DrawCircle dc1 = DrawCircle(newpo[i]);
+  }
+  for (int i = 0; i < numPo; i++)
+  {
+    for (int j = 0; j < numPo; j++)
+    {
+      if(d[i][j]==1)
+      {
+        DrawLine dl1 = DrawLine( newpo[i], newpo[j] );
       }
     }
   }
