@@ -39,7 +39,7 @@ void DrawLine::calculateSlope()
   plotPixel(one);
   plotPixel(two);
 
-  if( m>0 && m<=1 )
+  if( m>=0 && m<=1 )
   {
     bresenham1();
   }
