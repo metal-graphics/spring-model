@@ -140,7 +140,7 @@ void myInit()
 
   glClearColor(0.0, 0.0, 0.0, 0.0);
 
-  glColor3f (1.0, 0.0, 1.0);
+  glColor3f (1.0, 1.0, 1.0);
 
   glMatrixMode(GL_PROJECTION);
 
