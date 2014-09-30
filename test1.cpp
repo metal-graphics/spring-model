@@ -23,6 +23,12 @@ void mouseFunction( int button, int state, int x, int y )
   int i=0;
   if( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN )
   {
+
+    if( y<=50 )
+    {
+      cout<<"hello\n";
+    }
+
     if( points.empty() )
     {
       pointVect.push_back(make_pair(x, 850-y));
